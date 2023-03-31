@@ -7,6 +7,10 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="styles.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
         <script src="scripts/script.js" async defer></script>
     </head>
     <body>
@@ -17,7 +21,15 @@
 
         <main class="main">
             <div class="options">
-                <button class="options__clear-btn">Clear canvas</button>
+                <input class="options__color-picker" type="color" value="#000000" onchange="changeColor()">
+                <button class="options__clear-btn">CLEAR</button>
+                <button class="options__eraser-btn">ERASER</button>
+                <div class="options__size-slider">
+                    <div class="options__size-text">16 x 16</div>
+                    <input  class="options__size-picker" type="range" 
+                            value="16" min="4" max="64" step="4" 
+                            onchange="changeCanvas()" oninput="changeSizeText()">
+                </div>
             </div>
             <div class="canvas"></div>
         </main>

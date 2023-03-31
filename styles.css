@@ -1,6 +1,13 @@
 :root {
     --grid-cols: 16;
     --grid-rows: 16;
+
+    --bg-color1: whitesmoke;
+    --bg-color2: gainsboro;
+    --font-color1: black;
+    --font-color2: white;
+    --btn-color1: orange;
+    --btn-color2: brown;
 }
 
 * {
@@ -11,7 +18,7 @@ a, a:hover, a:focus, a:active {
     text-decoration: none;
     color: inherit;
 }
-/* remove default button styling */
+
 button{
 	background: none;
 	color: inherit;
@@ -20,11 +27,32 @@ button{
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+
+    width: 100%;
+    color: var(--font-color2);
+    padding: 8px 8px;
+    border-radius: 2px;
+    border: 2px solid var(--btn-color2);
+    background-color: var(--btn-color1);
+    box-shadow: 0 8px var(--btn-color2);
 }
 
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px var(--btn-color2);
+}
+
+button:active,
+button.--active {
+    transform: translateY(7px);
+    box-shadow: 0 1px var(--btn-color2);
+}
+
+
 body {
-    background-color: whitesmoke;
-    margin: 0 0;
+    background-color: var(--bg-color1);
+    margin: 0;
+    padding: 0;
 }
 
 .header {
@@ -32,7 +60,9 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
-    margin-top: 0;
+    margin: 20px 0;
+
+    font-family: 'Press Start 2P', cursive;
 }
 
 .header__logo {
@@ -48,11 +78,14 @@ body {
 
 .main {
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     width: 900px;
     margin: 0 auto;
     gap: 50px;
+
+    font-family: 'Press Start 2P', cursive;
 }
 
 .canvas {
@@ -63,7 +96,7 @@ body {
     grid-template-columns: repeat(var(--grid-cols), 1fr);
     box-shadow: 
         0 0 7px rgb(16, 16, 16, 0.4),
-        0 0 15px rgba(16, 16, 16, 0.1);;
+        0 0 15px rgba(16, 16, 16, 0.1);
 }
 
 .canvas__tile {
@@ -71,17 +104,40 @@ body {
 }
 
 .options {
-    flex: 1;
+    position: absolute;
+    left: 0;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
     padding: 20px;
+    gap: 16px;
 
-    background-color: bisque;
+    background-color: var(--bg-color2);
 }
 
-.options__clear-btn {
-    background-color: red;
+.options__color-picker {
+    all: unset;
+    height: 64px;
+    width: 64px;
 }
+
+.options__size-slider {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 4px;
+}
+
+.options__size-picker {
+    all: unset;
+    border: 2px solid var(--btn-color2);
+    border-radius: 2px;
+    background-color: var(--btn-color2);
+    accent-color: var(--btn-color1);
+}
+
