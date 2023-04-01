@@ -1,8 +1,10 @@
+const root = document.querySelector(':root');
 const canvas = document.querySelector('.canvas');
 const clearBtn = document.querySelector('.options__clear-btn');
 const eraserBtn = document.querySelector('.options__eraser-btn');
 const rainbowBtn = document.querySelector('.options__rainbow-btn');
-const colorInput = document.querySelector('.options__color-picker');
+const bgColorInput = document.querySelector('.options__bg-color-picker');
+const brushColorInput = document.querySelector('.options__brush-color-picker');
 const sizeInput = document.querySelector('.options__size-picker');
 const sizeText = document.querySelector('.options__size-text');
 
@@ -10,7 +12,7 @@ let tiles = document.querySelectorAll('.canvas__tile');
 let canvasArray = [];
 let canvasSize = 16;
 let backgroundColor = 'white';
-let currentColor = 'black';
+let brushColor = 'black';
 let activeRainbow = false;
 let brushSize = 1;
 
@@ -19,46 +21,47 @@ function randint(min, max) { // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+/** Returns position of an element in a 2d array */
 function posIn2DArray(array, element){
-    for (let x=0; x < canvasSize; x++){
-        for (let y=0; y < canvasSize; y++){
-            if (array[x][y]===element) {
-                return [x,y];
-            }
-        }
-    }
+    for (let r=0; r < canvasSize; r++)
+        for (let c=0; c < canvasSize; c++)
+            if (array[r][c]===element) 
+                return [r,c];
 }
 
+/** * - Updates: grid size of the canvas, arrays with tiles
+    * - Creates: tiles in the canvas, listeners for tiles */
 function updateCanvasSize(size) {
-    /*
-    Changes the grid size of the canvas
-    Creates new tiles in the canvas
-    Create listeners for the new tiles
-    Updates the arrays with tiles
-    */
     canvas.style.setProperty('--grid-rows', size);
     canvas.style.setProperty('--grid-cols', size);
 
     canvas.innerHTML = '';
     canvasArray = [];
     for (let i=0; i < size; i++){
-        let column = [];
+
+        let row = [];
         for (let j=0; j < size; j++){
+
             let tile = document.createElement('div');
-            tile.className = "canvas__tile";
+            tile.classList.add("canvas__tile", "--background");
+
+            //listener for hover and press
             ['mouseover','mousedown'].forEach(
-                evt => tile.addEventListener(evt, function(e) {
+                evtName => tile.addEventListener(evtName, function(e) {
                     e.preventDefault()
                     colorTile(e);
                 }));
+
             canvas.appendChild(tile)
-            column.push(tile);
+            row.push(tile);
         }
-        canvasArray.push(column);
+        canvasArray.push(row);
     }
+
     tiles = document.querySelectorAll('.canvas__tile');
 }
 
+/** Returns array with elements inside the brush */
 function getElementsInBrush(centerElement){
     let elements = []
     let center = posIn2DArray(canvasArray, centerElement);
@@ -68,50 +71,64 @@ function getElementsInBrush(centerElement){
     return elements;
 }
 
+/** Changes color of tile if mouse1 is pressed */
 function colorTile(e) {
-    if (!e.buttons==1) return;
+    if (e.buttons!==1) return;
+
     let elems = getElementsInBrush(e.target);
     for (let i=0, l=elems.length; i < l; i++){
+        elems[i].classList.remove("--background")
         elems[i].style.backgroundColor = 
-            activeRainbow ? `rgb(${randint(0,255)},${randint(0,255)},${randint(0,255)})` : currentColor;
+            activeRainbow ? `rgb(${randint(0,255)},${randint(0,255)},${randint(0,255)})` : brushColor;
     }
 }
 
+/** Clears canvas with background color */
 function clearCanvas() {
-    tiles.forEach(n => n.style.backgroundColor = 'white')
+    tiles.forEach(n => n.style.backgroundColor = backgroundColor)
 }
 
-function changeColor() {
-    currentColor = colorInput.value;
+/** Replaces the current brush color with the picker color */
+function updateBrushColor() {
+    brushColor = brushColorInput.value;
 }
 
+/** Replaces the current canvas bg color with the picker color */
+function updateBackgroundColor() {
+    root.style.setProperty('--canvas-bg-color', bgColorInput.value);
+}
+
+/** Toggles the eraser button */
 function toggleEraser() {
     if (!eraserBtn.classList.contains('--active')) {
-        currentColor = backgroundColor;
+        brushColor = backgroundColor;
     } else {
-        currentColor = colorInput.value;
+        brushColor = brushColorInput.value;
     }
     eraserBtn.classList.toggle('--active');
 }
 
+/** Toggles the rainbow button */
 function toggleRainbow() {
     activeRainbow = !activeRainbow;
     rainbowBtn.classList.toggle('--active');
 }
 
-function changeCanvas() {
+/** Updates the canvas size and size variable */
+function updateCanvas() {
     canvasSize = sizeInput.value;
     updateCanvasSize(canvasSize);
-    changeSizeText();
 }
 
-function changeSizeText() {
+/** Updates the text above the slider with current size */
+function updateSizeText() {
     sizeText.textContent = `${sizeInput.value} x ${sizeInput.value}`
 }
 
+/** Resets all buttons to their */
 function resetButtons() {
     eraserBtn.classList.remove('--active');
-    currentColor = colorInput.value;
+    brushColor = brushColorInput.value;
 
     rainbowBtn.classList.remove('--active');
     activeRainbow = false;
@@ -119,14 +136,12 @@ function resetButtons() {
 
 updateCanvasSize(16);
 
-
-
 clearBtn.onclick = () => clearCanvas();
 eraserBtn.onclick = () => toggleEraser();
 rainbowBtn.onclick = () => toggleRainbow();
 
-// sizeInput.addEventListener('change', changeCanvas());
-// colorInput.addEventListener('change', changeColor());
+// sizeInput.addEventListener('change', updateCanvas());
+// colorInput.addEventListener('change', updateColor());
 
 
 //if clicked outside the canvas, unselect the eraser

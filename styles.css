@@ -2,6 +2,8 @@
     --grid-cols: 16;
     --grid-rows: 16;
 
+    --canvas-bg-color: white;
+
     --bg-color1: whitesmoke;
     --bg-color2: gainsboro;
     --font-color1: black;
@@ -113,6 +115,10 @@ body {
     background-color: white;
 }
 
+.canvas__tile.--background {
+    background-color: var(--canvas-bg-color);
+}
+
 .options {
     position: absolute;
     left: 0;
@@ -128,13 +134,13 @@ body {
     background-color: var(--bg-color2);
 }
 
-.options__color-picker {
+input[type=color] {
     all: unset;
     height: 64px;
     width: 64px;
 }
 
-.options__size-slider {
+.options__size-picker-container {
     display: flex;
     flex-direction: column;
     justify-content: center;

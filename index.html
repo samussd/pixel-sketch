@@ -21,15 +21,16 @@
 
         <main class="main">
             <div class="options">
-                <input class="options__color-picker" type="color" value="#000000" onchange="changeColor()">
+                <input class="options__bg-color-picker" type="color" value="#ffffff" oninput="updateBackgroundColor()">
+                <input class="options__brush-color-picker" type="color" value="#000000" onchange="updateBrushColor()">
                 <button class="options__clear-btn">CLEAR</button>
                 <button class="options__eraser-btn">ERASER</button>
                 <button class="options__rainbow-btn">RAINBOW</button>
-                <div class="options__size-slider">
+                <div class="options__size-picker-container">
                     <div class="options__size-text">16 x 16</div>
                     <input  class="options__size-picker" type="range" 
                             value="16" min="4" max="64" step="4" 
-                            onchange="changeCanvas()" oninput="changeSizeText()">
+                            onchange="updateCanvas()" oninput="updateSizeText()">
                 </div>
             </div>
             <div class="canvas"></div>
