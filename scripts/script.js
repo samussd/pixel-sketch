@@ -95,7 +95,8 @@ function updateBrushColor() {
 
 /** Replaces the current canvas bg color with the picker color */
 function updateBackgroundColor() {
-    root.style.setProperty('--canvas-bg-color', bgColorInput.value);
+    backgroundColor = bgColorInput.value;
+    root.style.setProperty('--canvas-bg-color', backgroundColor);
 }
 
 /** Toggles the eraser button */
