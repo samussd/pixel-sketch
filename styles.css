@@ -116,7 +116,7 @@ body {
 }
 
 .canvas__tile.--background {
-    background-color: var(--canvas-bg-color);
+    background-color: var(--canvas-bg-color) !important;
 }
 
 .options {
@@ -155,5 +155,17 @@ input[type=color] {
     border-radius: 2px;
     background-color: var(--btn-color2);
     accent-color: var(--btn-color1);
+}
+
+.options__color-picker-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.options__color-picker-text {
+    margin: 0 auto;
 }
 

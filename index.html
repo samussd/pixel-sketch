@@ -21,10 +21,19 @@
 
         <main class="main">
             <div class="options">
-                <input class="options__bg-color-picker" type="color" value="#ffffff" oninput="updateBackgroundColor()">
-                <input class="options__brush-color-picker" type="color" value="#000000" onchange="updateBrushColor()">
+                <div class="options__color-picker-container">
+                    <p class="options__color-picker-text">BACK</p>
+                    <input  class="options__bg-color-picker" type="color"
+                            value="#ffffff" oninput="updateBackgroundColor()">
+                </div>
+                <div class="options__color-picker-container">
+                    <p class="options__color-picker-text">BRUSH</p>
+                    <input  class="options__brush-color-picker" type="color"
+                            value="#000000" onchange="updateBrushColor()">
+                </div>
                 <button class="options__clear-btn">CLEAR</button>
                 <button class="options__eraser-btn">ERASER</button>
+                <button class="options__fill-btn">FILL</button>
                 <button class="options__rainbow-btn">RAINBOW</button>
                 <div class="options__size-picker-container">
                     <div class="options__size-text">16 x 16</div>
