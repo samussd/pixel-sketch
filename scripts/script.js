@@ -1,13 +1,16 @@
 const root = document.querySelector(':root');
 const canvas = document.querySelector('.canvas');
+
 const clearBtn = document.querySelector('.options__clear-btn');
 const eraserBtn = document.querySelector('.options__eraser-btn');
 const rainbowBtn = document.querySelector('.options__rainbow-btn');
 const fillBtn = document.querySelector('.options__fill-btn');
-const bgColorInput = document.querySelector('.options__bg-color-picker');
+
 const brushColorInput = document.querySelector('.options__brush-color-picker');
-const sizeInput = document.querySelector('.options__size-picker');
-const sizeText = document.querySelector('.options__size-text');
+const canvasSizeInput = document.querySelector('.options__canvas-size-picker');
+const canvasSizeText = document.querySelector('.options__canvas-size');
+const brushSizeInput = document.querySelector('.options__brush-size-picker');
+const brushSizeText = document.querySelector('.options__brush-size');
 
 let tiles = document.querySelectorAll('.canvas__tile');
 let canvasArray = [];
@@ -16,11 +19,17 @@ let backgroundColor = 'white';
 let brushColor = 'black';
 let selectedTool = 'brush';
 let brushSize = 1;
+let darkModeActive = false;
 
 
 function randint(min, max) { // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+const sqrt2_2 = Math.sqrt(2)/2;
+
+const clamp = (number, min, max) =>
+   Math.max(min, Math.min(number, max));
 
 const HEXtoRGB = (hex) => "rgb(" + hex.match(/[A-Za-z0-9]{2}/g).map(function(v) { return parseInt(v, 16) }).join(", ") + ")";
 
@@ -36,19 +45,21 @@ function posIn2DArray(array, element){
 
 /** * - Updates: grid size of the canvas, arrays with tiles
     * - Creates: tiles in the canvas, listeners for tiles */
-function updateCanvasSize(size) {
-    canvas.style.setProperty('--grid-rows', size);
-    canvas.style.setProperty('--grid-cols', size);
+function updateCanvasSize() {
+    canvasSize = canvasSizeInput.value;
+
+    canvas.style.setProperty('--grid-rows', canvasSize);
+    canvas.style.setProperty('--grid-cols', canvasSize);
 
     canvas.innerHTML = '';
     canvasArray = [];
-    for (let i=0; i < size; i++){
+    for (let i=0; i < canvasSize; i++){
 
         let row = [];
-        for (let j=0; j < size; j++){
+        for (let j=0; j < canvasSize; j++){
 
             let tile = document.createElement('div');
-            tile.classList.add("canvas__tile", "--background");
+            tile.classList.add('canvas__tile');
 
             //listener for hover and press
             ['mouseover','mousedown'].forEach(
@@ -67,12 +78,43 @@ function updateCanvasSize(size) {
 }
 
 /** Returns array with elements inside the brush */
-function getElementsInBrush(centerElement){
-    let elements = []
+function getElementsInBrush(centerElement) {
     let center = posIn2DArray(canvasArray, centerElement);
-    //find surrounding tiles and push to elements array
-    elements.push(canvasArray[center[0]][center[1]]);
+    let r = center[0];
+    let c = center[1];
+    let elements = [];
 
+    //find surrounding tiles and push to elements array
+    if (brushSize==2) { //special case > make 2px square
+        elements.push(centerElement);
+        elements.push(canvasArray[clamp(r-1, 0, canvasSize-1)][c]);
+        elements.push(canvasArray[r][clamp(c-1, 0, canvasSize-1)]);
+        elements.push(canvasArray[clamp(r-1, 0, canvasSize-1)][clamp(c-1, 0, canvasSize-1)]);
+    } else
+        elements = getElementsInRadius(center, (brushSize*sqrt2_2)- 0.9);
+
+    return elements;
+}
+
+function getElementsInRadius(center, radius) {
+    //fix
+    let elements = []
+    let radiusSq = radius * radius;
+
+    //coordinates of the bounding box for the brush (for optimization)
+    //only check if elements inside the bounding box are in radius
+    let top = Math.max(Math.floor(center[0]-radius), 0);
+    let bottom = Math.min(Math.ceil(center[0]+radius), canvasSize-1);
+    let left = Math.max(Math.floor(center[1]-radius), 0);
+    let right = Math.min(Math.ceil(center[1]+radius), canvasSize-1);
+
+    for (let r=top, h=bottom+1, w=right+1; r < h; r++) {
+        for (let c=left; c < w; c++) {
+            if (((center[0] - r) ** 2) + ((center[1] - c) ** 2) < radiusSq) {
+                elements.push(canvasArray[r][c]);
+            }
+        }
+    }
     return elements;
 }
 
@@ -83,7 +125,6 @@ function fill(r, c, newColor, current) {
     if (canvasArray[r][c].style.backgroundColor !== current || canvasArray[r][c].style.backgroundColor === newColor) return;
 
     canvasArray[r][c].style.backgroundColor = newColor;
-    canvasArray[r][c].classList.remove('--background');
 
     //Fill in all four directions
     fill(r - 1, c, newColor, current);
@@ -120,26 +161,18 @@ function colorTile(e) {
 
     let elems = getElementsInBrush(e.target);
     for (let i=0, l=elems.length; i < l; i++){
-        elems[i].classList.remove("--background")
         elems[i].style.backgroundColor = color;
-        if (selectedTool=='eraser') elems[i].classList.add('--background');
     }
 }
 
 /** Clears canvas with background color */
 function clearCanvas() {
-    tiles.forEach(n => n.style.backgroundColor = backgroundColor)
+    tiles.forEach(n => n.style.backgroundColor = backgroundColor);
 }
 
 /** Replaces the current brush color with the picker color */
 function updateBrushColor() {
     brushColor = HEXtoRGB(brushColorInput.value);
-}
-
-/** Replaces the current canvas bg color with the picker color */
-function updateBackgroundColor() {
-    backgroundColor = bgColorInput.value;
-    root.style.setProperty('--canvas-bg-color', backgroundColor);
 }
 
 /** Toggles a tool button and changes*/
@@ -165,23 +198,51 @@ function resetTools(selectedBtn) {
     })
 }
 
-/** Updates the canvas size and size variable */
-function updateCanvas() {
-    canvasSize = sizeInput.value;
-    updateCanvasSize(canvasSize);
+function updateBrushSize() {
+    brushSize = brushSizeInput.value;
 }
 
 /** Updates the text above the slider with current size */
-function updateSizeText() {
-    sizeText.textContent = `${sizeInput.value} x ${sizeInput.value}`
+function updateCanvasSizeText() {
+    canvasSizeText.textContent = `${canvasSizeInput.value} x ${canvasSizeInput.value}`
 }
 
-updateCanvasSize(16);
+function updateBrushSizeText() {
+    brushSizeText.textContent = `${brushSizeInput.value} x ${brushSizeInput.value}`
+}
+
+updateCanvasSize();
+updateBrushSizeText();
+updateCanvasSizeText();
 
 clearBtn.addEventListener('click', () => clearCanvas());
 eraserBtn.addEventListener('click', () => toggleTool(eraserBtn, 'eraser'));
 rainbowBtn.addEventListener('click', () => toggleTool(rainbowBtn, 'rainbow'));
 fillBtn.addEventListener('click', () => toggleTool(fillBtn, 'fill'));
 
+//change theme color
+document.querySelector('.header__theme-btn').onclick = function() {
+    darkModeActive = !darkModeActive;
+
+    if (darkModeActive) {
+        root.style.setProperty('--bg-color1', '#19191c');
+        root.style.setProperty('--bg-color2', '#2e2e34');
+        root.style.setProperty('--font-color1', 'white');
+        root.style.setProperty('--font-color2', 'black');
+        root.style.setProperty('--btn-color1', 'brown');
+        root.style.setProperty('--btn-color2', '#090909');
+        document.querySelector('.header__theme-btn').style.filter = 'invert(0)';
+        document.querySelector('.header__github').style.filter = 'invert(0)';
+    } else {
+        root.style.setProperty('--bg-color1', 'whitesmoke');
+        root.style.setProperty('--bg-color2', 'gainsboro');
+        root.style.setProperty('--font-color1', 'black');
+        root.style.setProperty('--font-color2', 'white');
+        root.style.setProperty('--btn-color1', 'orange');
+        root.style.setProperty('--btn-color2', 'brown');
+        document.querySelector('.header__theme-btn').style.filter = 'invert(1)';
+        document.querySelector('.header__github').style.filter = 'invert(1)';
+    }
+}
 
 

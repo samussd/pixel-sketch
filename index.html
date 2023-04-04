@@ -15,6 +15,7 @@
     </head>
     <body>
         <header class="header">
+            <div class="header__theme-btn"></div>
             <div class="header__logo">PIXEL SKETCH</div>
             <a class="header__github" href="https://github.com/samussd/pixel-sketch" target="_blank"></a>
         </header>
@@ -22,28 +23,46 @@
         <main class="main">
             <div class="options">
                 <div class="options__color-picker-container">
-                    <p class="options__color-picker-text">BACK</p>
-                    <input  class="options__bg-color-picker" type="color"
-                            value="#ffffff" oninput="updateBackgroundColor()">
-                </div>
-                <div class="options__color-picker-container">
                     <p class="options__color-picker-text">BRUSH</p>
                     <input  class="options__brush-color-picker" type="color"
                             value="#000000" onchange="updateBrushColor()">
                 </div>
-                <button class="options__clear-btn">CLEAR</button>
-                <button class="options__eraser-btn">ERASER</button>
-                <button class="options__fill-btn">FILL</button>
-                <button class="options__rainbow-btn">RAINBOW</button>
-                <div class="options__size-picker-container">
-                    <div class="options__size-text">16 x 16</div>
-                    <input  class="options__size-picker" type="range" 
-                            value="16" min="4" max="64" step="4" 
-                            onchange="updateCanvas()" oninput="updateSizeText()">
+
+                <div class="options__buttons-container">
+                    <button class="options__fill-btn">FILL</button>
+                    <button class="options__rainbow-btn">RAINBOW</button>
+                    <button class="options__eraser-btn">ERASER</button>
+                    <button class="options__clear-btn">CLEAR</button>
+                </div>
+                
+                <div class="options__size-pickers">
+                    <div class="options__size-picker-container">
+                        <div class="options__picker-text">CANVAS</div>
+                        <div class="options__canvas-size">16 x 16</div>
+                        <input  class="options__canvas-size-picker options__size-picker" type="range"
+                                value="16" min="4" max="64" step="4"
+                                onchange="updateCanvasSize()" oninput="updateCanvasSizeText()">
+                    </div>
+                    <div class="options__size-picker-container">
+                        <div class="options__picker-text">BRUSH</div>
+                        <div class="options__brush-size">1 x 1</div>
+                        <input  class="options__brush-size-picker options__size-picker" type="range"
+                                value="1" min="1" max="16" step="1"
+                                onchange="updateBrushSize()" oninput="updateBrushSizeText()">
+                    </div>
                 </div>
             </div>
+
             <div class="canvas"></div>
         </main>
-        
+
+        <footer class="footer">
+            <div class="footer__text">
+                <a href="https://github.com/samussd" target="_blank">
+                2023 | made by samussd
+                </a>
+            </div>
+        </footer>
+
     </body>
 </html>

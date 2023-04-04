@@ -29,6 +29,8 @@ button{
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+    flex-grow: 1;
+    flex-basis: content;
 
     width: 100%;
     color: var(--font-color2);
@@ -70,7 +72,10 @@ body {
 }
 
 .header__logo {
+    padding: 0 40px;
     font-size: 2rem;
+    text-align: center;
+    color: var(--font-color1);
 }
 
 .header__github {
@@ -85,15 +90,40 @@ body {
     image-rendering: pixelated;
 
     position: absolute;
-    left: 0;
+    left: 4px;
+}
+
+.header__theme-btn {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    background: 
+        transparent
+        url('images/github.png')
+        no-repeat;
+    filter: invert(1);
+    background-size: 100%;
+    image-rendering: pixelated;
+
+    position: absolute;
+    right: 4px;
+}
+
+.header__github.--invert {
+    filter: invert(0);
+}
+
+.header__theme-btn.--invert {
+    filter: invert(0);
 }
 
 .main {
     display: flex;
+    flex-wrap: wrap;
     position: relative;
     justify-content: center;
     align-items: center;
-    width: 900px;
+    max-width: 900px;
     margin: 0 auto;
     gap: 50px;
 
@@ -101,8 +131,8 @@ body {
 }
 
 .canvas {
-    height: 512px;
-    width: 512px;
+    height: min(512px, 100vw);
+    width: min(512px, 100vw);
     display: grid;
     grid-template-rows: repeat(var(--grid-rows), 1fr);
     grid-template-columns: repeat(var(--grid-cols), 1fr);
@@ -115,29 +145,71 @@ body {
     background-color: white;
 }
 
-.canvas__tile.--background {
-    background-color: var(--canvas-bg-color) !important;
+@media only screen and (min-width: 901px){
+    .options {
+        position: absolute;
+        left: 0;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 170px;
+        padding: 20px;
+        gap: 16px;
+        box-shadow: 
+        0 0 7px rgb(16, 16, 16, 0.4),
+        0 0 15px rgba(16, 16, 16, 0.1);
+
+        background-color: var(--bg-color2);
+    }
 }
 
-.options {
-    position: absolute;
-    left: 0;
+@media only screen and (max-width: 900px){
+    .options {
+        position: absolute;
+        top: min(532px, 110vw);
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    padding: 20px;
-    gap: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 20px;
+        gap: 16px;
+        box-shadow: 
+        0 0 7px rgb(16, 16, 16, 0.4),
+        0 0 15px rgba(16, 16, 16, 0.1);
 
-    background-color: var(--bg-color2);
+        background-color: var(--bg-color2);
+    }
 }
 
 input[type=color] {
     all: unset;
     height: 64px;
     width: 64px;
+}
+
+.options__buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.options__size-pickers {
+    color: var(--font-color1);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
 }
 
 .options__size-picker-container {
@@ -153,8 +225,9 @@ input[type=color] {
     all: unset;
     border: 2px solid var(--btn-color2);
     border-radius: 2px;
-    background-color: var(--btn-color2);
-    accent-color: var(--btn-color1);
+    background-color: var(--btn-color1);
+    accent-color: var(--btn-color2);
+    box-shadow: 0 8px var(--btn-color2);
 }
 
 .options__color-picker-container {
@@ -166,6 +239,27 @@ input[type=color] {
 }
 
 .options__color-picker-text {
+    color: var(--font-color1);
     margin: 0 auto;
 }
 
+
+.footer {
+    display: flex;
+    justify-content: center;
+    margin: 50px auto 0;
+    
+}
+
+.footer__text {
+    padding: 10px;
+    color: var(--font-color1);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .8rem;
+    text-align: center;
+    opacity: 30%;
+}
+
+.footer__text:hover {
+    opacity: 70%;
+}
