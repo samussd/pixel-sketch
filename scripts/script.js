@@ -5,6 +5,8 @@ const clearBtn = document.querySelector('.options__clear-btn');
 const eraserBtn = document.querySelector('.options__eraser-btn');
 const rainbowBtn = document.querySelector('.options__rainbow-btn');
 const fillBtn = document.querySelector('.options__fill-btn');
+const githubBtn = document.querySelector('.header__github');
+const themeBtn = document.querySelector('.header__theme-btn');
 
 const brushColorInput = document.querySelector('.options__brush-color-picker');
 const canvasSizeInput = document.querySelector('.options__canvas-size-picker');
@@ -230,9 +232,12 @@ document.querySelector('.header__theme-btn').onclick = function() {
         root.style.setProperty('--font-color1', 'white');
         root.style.setProperty('--font-color2', 'black');
         root.style.setProperty('--btn-color1', 'brown');
-        root.style.setProperty('--btn-color2', '#090909');
-        document.querySelector('.header__theme-btn').style.filter = 'invert(0)';
-        document.querySelector('.header__github').style.filter = 'invert(0)';
+        root.style.setProperty('--btn-color2', '#151515');
+        themeBtn.style.filter = 'invert(0)';
+        themeBtn.style.background = "transparent url('images/light-theme.png') no-repeat";
+        themeBtn.style.backgroundSize = "100%";
+        githubBtn.style.filter = 'invert(0)';
+        
     } else {
         root.style.setProperty('--bg-color1', 'whitesmoke');
         root.style.setProperty('--bg-color2', 'gainsboro');
@@ -240,8 +245,10 @@ document.querySelector('.header__theme-btn').onclick = function() {
         root.style.setProperty('--font-color2', 'white');
         root.style.setProperty('--btn-color1', 'orange');
         root.style.setProperty('--btn-color2', 'brown');
-        document.querySelector('.header__theme-btn').style.filter = 'invert(1)';
-        document.querySelector('.header__github').style.filter = 'invert(1)';
+        themeBtn.style.filter = 'invert(1)';
+        themeBtn.style.background = "transparent url('images/dark-theme.png') no-repeat";
+        themeBtn.style.backgroundSize = "100%";
+        githubBtn.style.filter = 'invert(1)';
     }
 }
 

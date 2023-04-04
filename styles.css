@@ -99,7 +99,7 @@ body {
     height: 32px;
     background: 
         transparent
-        url('images/github.png')
+        url('images/dark-theme.png')
         no-repeat;
     filter: invert(1);
     background-size: 100%;
@@ -109,17 +109,9 @@ body {
     right: 4px;
 }
 
-.header__github.--invert {
-    filter: invert(0);
-}
-
-.header__theme-btn.--invert {
-    filter: invert(0);
-}
-
 .main {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     position: relative;
     justify-content: center;
     align-items: center;
@@ -168,7 +160,6 @@ body {
 
 @media only screen and (max-width: 900px){
     .options {
-        position: absolute;
         top: min(532px, 110vw);
 
         display: flex;
@@ -258,6 +249,7 @@ input[type=color] {
     font-size: .8rem;
     text-align: center;
     opacity: 30%;
+    transition: opacity .1s ease-in-out;
 }
 
 .footer__text:hover {
