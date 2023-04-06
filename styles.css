@@ -221,6 +221,11 @@ input[type=color] {
     box-shadow: 0 8px var(--btn-color2);
 }
 
+.options__brush-size,
+.options__canvas-size {
+    font-size: .7rem;
+}
+
 .options__color-picker-container {
     display: flex;
     flex-direction: column;
