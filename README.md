@@ -1,5 +1,9 @@
 <h1 align="center">PIXEL SKETCH</h1>
 
+<p align="center">
+    <img src="images/readme.png">
+</p>
+
 <h4 align="center"><a href="https://samussd.github.io/pixel-sketch/">Live site</a></h4>
 
 ---
