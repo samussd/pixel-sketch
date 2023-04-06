@@ -230,7 +230,7 @@ document.querySelector('.header__theme-btn').onclick = function() {
         root.style.setProperty('--bg-color1', '#19191c');
         root.style.setProperty('--bg-color2', '#2e2e34');
         root.style.setProperty('--font-color1', 'white');
-        root.style.setProperty('--font-color2', 'black');
+        root.style.setProperty('--font-color2', '#151515');
         root.style.setProperty('--btn-color1', 'brown');
         root.style.setProperty('--btn-color2', '#151515');
         themeBtn.style.filter = 'invert(0)';
